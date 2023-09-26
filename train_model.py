@@ -66,8 +66,8 @@ def worker_init_fn(worker_id):
 ##################################################################################
 def main_loop(batch_size=config.batch_size, model_type='', tensorboard=True):
     # Load train and val data
-    train_tf = transforms.Compose([RandomGenerator(output_size=[config.img_size, config.img_size])])
-    val_tf = ValGenerator(output_size=[config.img_size, config.img_size])
+    train_tf = transforms.Compose([RandomGenerator(output_size=[config.img_size, config.img_size])]) # 转换器 图像大小转为224*224
+    val_tf = ValGenerator(output_size=[config.img_size, config.img_size]) #转换器
     if config.task_name == 'MoNuSeg':
         train_text = read_text(config.train_dataset + 'Train_text.xlsx')
         val_text = read_text(config.val_dataset + 'Val_text.xlsx')
@@ -85,14 +85,14 @@ def main_loop(batch_size=config.batch_size, model_type='', tensorboard=True):
                               batch_size=config.batch_size,
                               shuffle=True,
                               worker_init_fn=worker_init_fn,
-                              num_workers=8,
+                              num_workers=0,
                               pin_memory=True)
 
     val_loader = DataLoader(val_dataset,
                             batch_size=config.batch_size,
                             shuffle=True,
                             worker_init_fn=worker_init_fn,
-                            num_workers=8,
+                            num_workers=0,
                             pin_memory=True)
                              
     lr = config.learning_rate
